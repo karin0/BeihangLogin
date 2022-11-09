@@ -27,8 +27,7 @@ login() {
     exit 1
   fi
   down=1
-  timeout -v 30 bash ./login-v2.sh login || \
-  timeout -v 30 bash ./login-v2.sh login
+  timeout -v 20 bash ./login-v2.sh login
   # login-v2.sh isn't putting a trailing newline
   echo
 }
@@ -47,6 +46,7 @@ elif [ -n "$1" ] && [ "$1" != -t ]; then
   usage
 else
   never_up=1
+  abroad=0
   while true; do
     online=$(
 curl -sSL "https://gw.buaa.edu.cn/cgi-bin/rad_user_info" \
@@ -55,17 +55,25 @@ curl -sSL "https://gw.buaa.edu.cn/cgi-bin/rad_user_info" \
 2>&1
     )
     r=$?
-    if [ $r -ne 0 ]; then
+    if [ $r -eq 6 ]; then  # Could not resolve host
+      if [ $abroad != 1 ]; then
+        echo "$online"
+        log 'curl failed to resolve host, maybe abroad'
+        abroad=1
+      fi
+    elif [ $r -ne 0 ]; then
       echo "$online"
       log "curl failed: $r" >&2
     elif grep -q "not_online_error" <<< "$online"; then
+      abroad=0
       login "Gateway not online: $online"
     else
+      abroad=0
+      down=0
       if [ $never_up = 1 ]; then
         log "online: $(cut -d, -f1 <<< "$online")"
         never_up=0
       fi
-      down=0
     fi
     if [ "$1" = -t ]; then
       exit
