@@ -11,8 +11,10 @@ source $SCRIPT_DIR/account
 # Customization #
 #################
 # If you need to modify SYSNAME, please use a url-encoded string
-SYSNAME="Mac+OS"
-UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"
+# e.g. "Mac+OS"
+SYSNAME='Windows+10'
+SYSTYPE=Windows
+UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
 COOKIEFILE=`mktemp`
 
 #################################
@@ -48,7 +50,7 @@ function floor()
 	return $((result))
 }
 
-# Note that integer in bash in mostly 64 bits, 
+# Note that integer in bash in mostly 64 bits,
 # functions below aim to simulate 32 bits calculation.
 
 # sl(base, shift): Bitwise shift left (32 bits).
@@ -236,7 +238,7 @@ function l_func()
 		a[$i]=${s1}${s2}${s3}${s4}
 	done
 	result=$( IFS=""; echo "${a[*]}" )
-	echo $result 
+	echo $result
 }
 
 ################
@@ -328,7 +330,7 @@ if [[ "$option" == "login" ]]; then
 	-H "Sec-Fetch-Site: same-origin" \
 	-H "Referer: https://gw.buaa.edu.cn/srun_portal_pc?ac_id=$AC_ID&theme=buaa&url=www.buaa.edu.cn" \
 	-H "Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6" \
-	"https://gw.buaa.edu.cn/cgi-bin/srun_portal?callback=jQuery112407419864172676014_1566720734115&action=login&username="$USERNAME"&password=%7BMD5%7D"$PWD"&ac_id=$AC_ID&ip="$CLIENTIP"&chksum="$CHKSUM"&info=%7BSRBX1%7D"$URL_INFO"&n=200&type=1&os="$SYSNAME"&name=Macintosh&double_stack=0&_="$TIMESTAMP
+	"https://gw.buaa.edu.cn/cgi-bin/srun_portal?callback=jQuery112407419864172676014_1566720734115&action=login&username="$USERNAME"&password=%7BMD5%7D"$PWD"&ac_id=$AC_ID&ip="$CLIENTIP"&chksum="$CHKSUM"&info=%7BSRBX1%7D"$URL_INFO"&n=200&type=1&os="$SYSNAME"&name=$SYSTYPE&double_stack=0&_="$TIMESTAMP
 
 elif [[ "$option" == "logout" ]]; then
 	curl -k -b $COOKIEFILE \

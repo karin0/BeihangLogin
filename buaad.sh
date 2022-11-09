@@ -6,6 +6,9 @@ usage() {
   exit 1
 }
 
+# as in login-v2.sh
+UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+
 if [ -z "$JOURNAL_STREAM" ] && [ "$1" != -t ]; then
   log() {
     echo "$(date "+%Y-%m-%d %H:%M:%S") $*"
@@ -48,7 +51,8 @@ else
     online=$(
 curl -sSL "https://gw.buaa.edu.cn/cgi-bin/rad_user_info" \
 -c cookie.jar \
---header "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
+-A "$UA" \
+2>&1
     )
     r=$?
     if [ $r -ne 0 ]; then
