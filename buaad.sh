@@ -36,7 +36,7 @@ login() {
 if [ "$1" = -p ]; then
   log 'ping daemon started'
   while true; do
-    if ping -c 1 -w 2 mirrors4.tuna.tsinghua.edu.cn >/dev/null; then
+    if ping -c 1 -w 2 223.5.5.5 >/dev/null; then
       down=0
     else
       login Disconnected
